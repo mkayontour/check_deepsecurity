@@ -26,3 +26,22 @@ releases:
         url: "file:///check_deepsecurity.php"
         description: "PNP4Nagios-Template"
         checksum: b086902f751faf054403b4f94b8cadd0
+  -
+    name: 0.2
+    description: "Adds antimalware events check"
+    files:
+      -
+        name: check_deepsecurity.pl
+        url: "file:///check_deepsecurity.pl"
+        description: "The script itself"
+        checksum: 88596697523699f3c4e30a0a408cf49d
+      -
+        name: check_deepsecurity.conf
+        url: "file:///check_deepsecurity.conf"
+        description: "Icinga2 CheckCommand"
+        checksum: b086902f751faf054403b4f94b8cadd0
+      -
+        name: check_deepsecurity.php
+        url: "file:///check_deepsecurity.php"
+        description: "PNP4Nagios-Template"
+        checksum: f433df8a7131523d95a605702e8d8791

@@ -8,6 +8,8 @@ This plugin provide checks to retrieve the state summary and a single host state
 ### Requirements
 
 * Perl libraries: `SOAP::Lite`
+* Perl libraries: `DateTime`
+* Perl libraries: `DateTime::Format::Strptime`
 
 ### Usage
 
@@ -19,8 +21,12 @@ To retrieve the single host status of a specific host use the --host option toge
 
 e.g. $ perl deepsecurity_check.pl --mode status --host <displayName> --user <user> --pass <pass> --wsdl <url>
 
+To retrieve the state summary of all antiware events in the last day use the --mode=antimalware without the --host option.
+
+e.g. $ perl deepsecurity_check.pl --mode antimalware --user <user> --pas
+
 ### Options
-    --mode		(status) required
+    --mode		(status|antimalware) required
     --host		(displayName of the host) required in case to retrieve the host status
     --user		(username) required
     --pass		(password) required

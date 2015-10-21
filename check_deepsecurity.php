@@ -3,8 +3,8 @@
 # PNP4Nagios Template for check_deepsecurity plugin
 #
 # COPYRIGHT:
-# 
-# This software is Copyright (c) 2015 NETWAYS GmbH, Dirk Götz
+#
+# This software is Copyright (c) 2015 NETWAYS GmbH, Dirk Goetz
 #                                <support@netways.de>
 #
 # LICENSE:
@@ -41,34 +41,75 @@
 # works based on those contributions, and sublicense and distribute
 # those contributions and any derivatives thereof.
 #
-# RRDtool Options
-$opt[1] = "-l 0 --title \"Deepsecurity Status\" ";
-#
-#
-# Graph Definitions
-# Variablen: critical, warning, managed, unmanaged
-$def[1] =  "DEF:var1=$rrdfile:1:AVERAGE "; 
-$def[1] .= "DEF:var2=$rrdfile:2:AVERAGE "; 
-$def[1] .= "DEF:var3=$rrdfile:3:AVERAGE "; 
-$def[1] .= "DEF:var4=$rrdfile:4:AVERAGE "; 
+if ($NAME[$DS[1]] == "critical") {
+  # RRDtool Options
+  $opt[1] = "-l 0 --title \"Deepsecurity Status\" ";
+  #
+  #
+  # Graph Definitions
+  # Variablen: critical, warning, managed, unmanaged
+  $def[1] =  "DEF:var1=$rrdfile:1:AVERAGE ";
+  $def[1] .= "DEF:var2=$rrdfile:2:AVERAGE ";
+  $def[1] .= "DEF:var3=$rrdfile:3:AVERAGE ";
+  $def[1] .= "DEF:var4=$rrdfile:4:AVERAGE ";
 
-# Totals
-$def[1] .= "CDEF:tot=var1,var2,+,var3,+,var4,+ ";
+  # Totals
+  $def[1] .= "CDEF:tot=var1,var2,+,var3,+,var4,+ ";
 
-# Graphen: managed, unmanaged, warning, critical
-$def[1] .= "AREA:var3#00FF00:managed ";
-$def[1] .= "LINE1:0#008000::STACK ";
-$def[1] .= "AREA:var2#FFFF00:warning:STACK ";
-$def[1] .= "LINE1:0#808000::STACK ";
-$def[1] .= "AREA:var4#d6d6d6:unmanaged:STACK ";
-$def[1] .= "LINE1:0#565656::STACK ";
-$def[1] .= "AREA:var1#FF0000:critical\j:STACK ";
-$def[1] .= "LINE1:0#800000::STACK ";
+  # Graphen: managed, unmanaged, warning, critical
+  $def[1] .= "AREA:var3#00FF00:managed ";
+  $def[1] .= "LINE1:0#008000::STACK ";
+  $def[1] .= "AREA:var2#FFFF00:warning:STACK ";
+  $def[1] .= "LINE1:0#808000::STACK ";
+  $def[1] .= "AREA:var4#d6d6d6:unmanaged:STACK ";
+  $def[1] .= "LINE1:0#565656::STACK ";
+  $def[1] .= "AREA:var1#FF0000:critical\j:STACK ";
+  $def[1] .= "LINE1:0#800000::STACK ";
 
-# Legende
-$def[1] .= "GPRINT:var1:LAST:\"%.lf critical \" ";
-$def[1] .= "GPRINT:var2:LAST:\"%.lf warning \" ";
-$def[1] .= "GPRINT:var3:LAST:\"%.lf managed \" ";
-$def[1] .= "GPRINT:var4:LAST:\"%.lf unmanaged \" ";
-$def[1] .= "GPRINT:tot:LAST:\"%.lf total \" ";
+  # Legende
+  $def[1] .= "GPRINT:var1:LAST:\"%.lf critical \" ";
+  $def[1] .= "GPRINT:var2:LAST:\"%.lf warning \" ";
+  $def[1] .= "GPRINT:var3:LAST:\"%.lf managed \" ";
+  $def[1] .= "GPRINT:var4:LAST:\"%.lf unmanaged \" ";
+  $def[1] .= "GPRINT:tot:LAST:\"%.lf total \" ";
+} else {
+  # RRDtool Options
+  $opt[1] = "-l 0 --title \"Deepsecurity Antimalware\" ";
+  #
+  #
+  # Graph Definitions
+  # Variablen: cleaned, denied, deleted, passed, quarantined, uncleanable
+  $def[1] =  "DEF:var1=$rrdfile:1:AVERAGE ";
+  $def[1] .= "DEF:var2=$rrdfile:2:AVERAGE ";
+  $def[1] .= "DEF:var3=$rrdfile:3:AVERAGE ";
+  $def[1] .= "DEF:var4=$rrdfile:4:AVERAGE ";
+  $def[1] .= "DEF:var5=$rrdfile:5:AVERAGE ";
+  $def[1] .= "DEF:var6=$rrdfile:6:AVERAGE ";
+
+  # Totals
+  $def[1] .= "CDEF:tot=var1,var2,+,var3,+,var4,+,var5,+,var6,+ ";
+
+  # Graphen: cleaned, denied, deleted, passed, quarantined, uncleanable
+  $def[1] .= "AREA:var1#00FF00:cleaned ";
+  $def[1] .= "LINE1:0#008000::STACK ";
+  $def[1] .= "AREA:var2#909090:denied:STACK ";
+  $def[1] .= "LINE1:0#757575::STACK ";
+  $def[1] .= "AREA:var3#0000FF:deleted:STACK ";
+  $def[1] .= "LINE1:0#000080::STACK ";
+  $def[1] .= "AREA:var4#FFFF00:passed:STACK ";
+  $def[1] .= "LINE1:0#808000::STACK ";
+  $def[1] .= "AREA:var5#FF9000:quarantined:STACK ";
+  $def[1] .= "LINE1:0#8075::STACK ";
+  $def[1] .= "AREA:var6#FF0000:uncleanable\j:STACK ";
+  $def[1] .= "LINE1:0#800000::STACK ";
+
+  # Legende
+  $def[1] .= "GPRINT:var1:LAST:\"%.lf cleaned \" ";
+  $def[1] .= "GPRINT:var2:LAST:\"%.lf denied \" ";
+  $def[1] .= "GPRINT:var3:LAST:\"%.lf deleted \" ";
+  $def[1] .= "GPRINT:var4:LAST:\"%.lf passed \" ";
+  $def[1] .= "GPRINT:var5:LAST:\"%.lf quarantined \" ";
+  $def[1] .= "GPRINT:var6:LAST:\"%.lf uncleanable \" ";
+  $def[1] .= "GPRINT:tot:LAST:\"%.lf total \" ";
+}
 ?>
