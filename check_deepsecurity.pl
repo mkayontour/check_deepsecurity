@@ -212,17 +212,28 @@ if (($opts->{mode} eq "status")&&(not defined $opts->{host})) {
 
 	closeSession();
 
-	if (defined $uwarning)&&(defined $ucritical) {
-		if ( $s->{u} > $ucritical ) {
-			my $output = "Critical: Unmanaged ".$s->{u};
-			print "Computer Status: " . $output . " | " . $perf . "\n";
+	if (defined $opts->{uwarning} )&&(defined $opts->{ucritical}) {
+		if ( $s->{u} > $opts->{ucritical} ) {
+			$output = "Unmanaged ".$s->{u}.", Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m};
+			print "Critical Computer Status: " . $output . " | " . $perf . "\n";
 			exit 2;
 		}
-		if ($s->{u} > $uwarning ) {
-			my $output = "Warning: Unmanaged ".$s->{u};
-			print "Computer Status: " . $output . " | " . $perf . "\n";
+		if ($s->{u} > $opts->{uwarning} ) {
+			$output = "Unmanaged ".$s->{u}.", Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m};
+			print "Warning Computer Status: " . $output . " | " . $perf . "\n";
 			exit 1;
 		}
+	}
+
+	if ( $s->{c} > 0 ) {
+		$output = "Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m}.", Unmanaged ".$s->{u};
+		print "Critical Computer Status: " . $output . " | " . $perf . "\n";
+		exit 2;
+	}
+	if ($s->{w} > 0 ) {
+		$output = "Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m}.", Unmanaged ".$s->{u};
+		print "Warning Computer Status: " . $output . " | " . $perf . "\n";
+		exit 1;
 	}
 
   print "Computer Status: " . $output . " | " . $perf . "\n";
