@@ -136,14 +136,16 @@ HELP
 my $opts;
 
 GetOptions(
-	'mode=s'  => \$opts->{mode},
-	'host=s'  => \$opts->{host},
-	'user=s'  => \$opts->{user},
-	'pass=s'  => \$opts->{pass},
-	'wsdl=s'  => \$opts->{wsdl},
-	'version' => \$opts->{version},
-	'help'	  => \$opts->{help},
-	'debug'	  => \$opts->{debug},
+	'mode=s'     => \$opts->{mode},
+	'host=s'     => \$opts->{host},
+	'user=s'     => \$opts->{user},
+	'pass=s'     => \$opts->{pass},
+	'wsdl=s'     => \$opts->{wsdl},
+	'unmanaged_warning=s' => \$opts->{uwarning},
+	'unmanaged_critical=s'=> \$opts->{ucritical},
+	'version'    => \$opts->{version},
+	'help'	     => \$opts->{help},
+	'debug'	     => \$opts->{debug},
 );
 
 if (defined $opts->{version}) {
@@ -206,10 +208,24 @@ if (($opts->{mode} eq "status")&&(not defined $opts->{host})) {
 	my $output = "Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m}.", Unmanaged ".$s->{u};
 	my $perf = "critical=".$s->{c}." warning=".$s->{w}." managed=".$s->{m}." unmanaged=".$s->{u};
 
-	print "Computer Status: " . $output . " | " . $perf . "\n";
+
 
 	closeSession();
 
+	if (defined $uwarning)&&(defined $ucritical) {
+		if ( $s->{u} > $ucritical ) {
+			my $output = "Critical: Unmanaged ".$s->{u};
+			print "Computer Status: " . $output . " | " . $perf . "\n";
+			exit 2;
+		}
+		if ($s->{u} > $uwarning ) {
+			my $output = "Warning: Unmanaged ".$s->{u};
+			print "Computer Status: " . $output . " | " . $perf . "\n";
+			exit 1;
+		}
+	}
+
+  print "Computer Status: " . $output . " | " . $perf . "\n";
 	exit 0;
 }
 
@@ -367,4 +383,3 @@ if (($opts->{mode} eq "antimalware")&&(not defined $opts->{host})) {
 
 	exit $state;
 }
-
