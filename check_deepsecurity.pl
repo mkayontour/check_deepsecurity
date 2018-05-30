@@ -212,7 +212,7 @@ if (($opts->{mode} eq "status")&&(not defined $opts->{host})) {
 
 	closeSession();
 
-	if (defined $opts->{uwarning} )&&(defined $opts->{ucritical}) {
+	if ((defined $opts->{uwarning} )&&(defined $opts->{ucritical})) {
 		if ( $s->{u} > $opts->{ucritical} ) {
 			$output = "Unmanaged ".$s->{u}.", Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m};
 			print "Critical Computer Status: " . $output . " | " . $perf . "\n";
