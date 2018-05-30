@@ -104,14 +104,16 @@ summary of the antimalware events of the last day.
 
 Options:
 
-	--mode		(status|antimalware) required
-	--host		(displayName of the host) required in case to retrieve the host status
-	--user		(username) required
-	--pass		(password) required
-	--wsdl		(the url to the wsdl of the deep security manager) required
-	--version	(version)
-	--help		(help)
-	--debug		(print soap call all status informations)
+	--mode							(status|antimalware) required
+	--host							(displayName of the host) required in case to retrieve the host status
+	--user							(username) required
+	--pass							(password) required
+	--wsdl							(the url to the wsdl of the deep security manager) required
+	--unmanaged_warning (number) when using mode status warning threshold for unmanaged agents
+	--unmanaged_critical(number) when using mode status critical threshold for unmanaged agents
+	--version						(version)
+	--help							(help)
+	--debug							(print soap call all status informations)
 
 Usage:
 
@@ -212,12 +214,14 @@ if (($opts->{mode} eq "status")&&(not defined $opts->{host})) {
 
 	closeSession();
 
-	if ((defined $opts->{uwarning} )&&(defined $opts->{ucritical})) {
+	if ( defined $opts->{ucritical} ) {
 		if ( $s->{u} > $opts->{ucritical} ) {
 			$output = "Unmanaged ".$s->{u}.", Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m};
 			print "Critical Computer Status: " . $output . " | " . $perf . "\n";
 			exit 2;
 		}
+	}
+	if ( defined $opts->{uwarning} ) {
 		if ($s->{u} > $opts->{uwarning} ) {
 			$output = "Unmanaged ".$s->{u}.", Critical ".$s->{c}.", Warning ".$s->{w}.", Managed ".$s->{m};
 			print "Warning Computer Status: " . $output . " | " . $perf . "\n";
